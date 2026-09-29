@@ -77,8 +77,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry }) => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors bg-emerald-950/40 border border-emerald-800/60 px-2 py-0.5 rounded text-[10px]"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>WhatsApp Live</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>WhatsApp</span>
             </a>
           </div>
         </div>

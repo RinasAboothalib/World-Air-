@@ -81,11 +81,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center lg:text-left flex flex-col justify-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 w-full text-left flex flex-col justify-center">
         <div className="max-w-3xl">
           {/* Established Brand Kicker with subtle gold accent */}
           <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded border border-amber-500/30 bg-stone-900/60 backdrop-blur-md mb-6 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-red-500" />
             <span className="text-xs uppercase tracking-widest font-semibold text-amber-300">
               25+ Years of Redefining Travel
             </span>
@@ -109,7 +109,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
           </p>
 
           {/* Primary Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12">
+          <div className="flex flex-wrap items-center justify-start gap-4 mb-10">
             <a
               href="#flight-search"
               className="bg-red-700 hover:bg-red-800 text-white font-semibold px-7 py-3.5 rounded shadow-lg hover:shadow-red-900/30 transition-all flex items-center gap-2.5 text-sm uppercase tracking-wider group cursor-pointer border border-red-600"
@@ -136,21 +136,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
             </a>
           </div>
 
-          {/* Trust Indicator Bar */}
-          <div className="pt-6 border-t border-stone-800/80 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-6 text-xs text-stone-400">
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-400" />
-              <span className="font-medium text-stone-300">25+ Years of Industry Experience</span>
+          {/* Trust Indicator Bar in Single Line */}
+          <div className="pt-6 border-t border-stone-800/80 flex items-center justify-start gap-x-4 xl:gap-x-6 text-xs text-stone-300 whitespace-nowrap overflow-x-auto pb-1">
+            <div className="flex items-center gap-2 shrink-0">
+              <Award className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="font-semibold text-stone-200">25+ Years of Industry Experience</span>
             </div>
-            <span className="hidden sm:inline text-stone-700">|</span>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-red-400" />
-              <span className="font-medium text-stone-300">International Ticketing Specialists</span>
+            <span className="text-stone-600 shrink-0">|</span>
+            <div className="flex items-center gap-2 shrink-0">
+              <ShieldCheck className="w-4 h-4 text-red-400 shrink-0" />
+              <span className="font-semibold text-stone-200">International Ticketing Specialists</span>
             </div>
-            <span className="hidden sm:inline text-stone-700">|</span>
-            <div className="flex items-center gap-2">
-              <Compass className="w-4 h-4 text-amber-400" />
-              <span className="font-medium text-stone-300">Sri Lanka's Established Travel Partner</span>
+            <span className="text-stone-600 shrink-0">|</span>
+            <div className="flex items-center gap-2 shrink-0">
+              <Compass className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="font-semibold text-stone-200">Sri Lanka's Established Travel Partner</span>
             </div>
           </div>
         </div>

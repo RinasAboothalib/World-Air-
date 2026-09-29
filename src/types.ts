@@ -37,6 +37,7 @@ export interface Destination {
 export interface StudentDestination {
   country: string;
   flag: string;
+  flagImg?: string;
   code: string;
   universitiesHub: string;
   baggageAllowance: string;

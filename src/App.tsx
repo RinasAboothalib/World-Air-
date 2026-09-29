@@ -11,7 +11,6 @@ import { DestinationsSection } from './components/DestinationsSection';
 import { RouteMapSection } from './components/RouteMapSection';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { TestimonialsSection } from './components/TestimonialsSection';
-import { TravelInspiration } from './components/TravelInspiration';
 import { CTASection } from './components/CTASection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -62,13 +61,6 @@ export default function App() {
     setModalOpen(true);
   };
 
-  // Trigger from Travel Inspiration
-  const handleSelectInspiration = (title: string) => {
-    setSelectedDestination(title);
-    setModalType('holiday');
-    setModalOpen(true);
-  };
-
   return (
     <div className="min-h-screen bg-white text-stone-900 flex flex-col font-sans selection:bg-red-700 selection:text-white">
       {/* Short aviation page loading animation */}
@@ -114,9 +106,6 @@ export default function App() {
 
         {/* Testimonials & Facebook 86%+ Recommendation Score */}
         <TestimonialsSection />
-
-        {/* Travel Inspiration Editorial Gallery */}
-        <TravelInspiration onSelectInspiration={handleSelectInspiration} />
 
         {/* Aviation Sunset Wing Call to Action */}
         <CTASection onOpenInquiry={handleOpenInquiry} />

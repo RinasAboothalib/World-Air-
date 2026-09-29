@@ -45,6 +45,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'Japan',
     flag: '🇯🇵',
+    flagImg: 'https://flagcdn.com/w160/jp.png',
     code: 'JPN',
     universitiesHub: 'Tokyo, Osaka, Nagoya, Kyoto',
     baggageAllowance: 'Up to 40kg (2 × 23kg on partner airlines)',
@@ -54,6 +55,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'Australia',
     flag: '🇦🇺',
+    flagImg: 'https://flagcdn.com/w160/au.png',
     code: 'AUS',
     universitiesHub: 'Melbourne, Sydney, Brisbane, Perth',
     baggageAllowance: 'Up to 40kg + 7kg cabin allowance',
@@ -63,6 +65,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'United Kingdom',
     flag: '🇬🇧',
+    flagImg: 'https://flagcdn.com/w160/gb.png',
     code: 'GBR',
     universitiesHub: 'London, Manchester, Birmingham, Edinburgh',
     baggageAllowance: 'Up to 40kg baggage allowance',
@@ -70,8 +73,9 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
     highlights: ['Student visa ticket compliance', 'Direct and 1-stop options', 'Flexible open returns'],
   },
   {
-    country: 'USA',
+    country: 'United States',
     flag: '🇺🇸',
+    flagImg: 'https://flagcdn.com/w160/us.png',
     code: 'USA',
     universitiesHub: 'New York, Boston, California, Texas',
     baggageAllowance: '2 pieces (23kg each)',
@@ -81,6 +85,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'Canada',
     flag: '🇨🇦',
+    flagImg: 'https://flagcdn.com/w160/ca.png',
     code: 'CAN',
     universitiesHub: 'Toronto, Montreal, Vancouver, Calgary',
     baggageAllowance: '2 × 23kg standard baggage',
@@ -90,6 +95,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'China',
     flag: '🇨🇳',
+    flagImg: 'https://flagcdn.com/w160/cn.png',
     code: 'CHN',
     universitiesHub: 'Beijing, Shanghai, Guangzhou, Wuhan',
     baggageAllowance: 'Up to 40kg allowance',
@@ -99,6 +105,7 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   {
     country: 'Taiwan',
     flag: '🇹🇼',
+    flagImg: 'https://flagcdn.com/w160/tw.png',
     code: 'TWN',
     universitiesHub: 'Taipei, Kaohsiung, Tainan',
     baggageAllowance: 'Up to 35kg allowance',
@@ -107,7 +114,8 @@ export const STUDENT_DESTINATIONS: StudentDestination[] = [
   },
   {
     country: 'Europe',
-    flag: '🌍',
+    flag: '🇪🇺',
+    flagImg: 'https://flagcdn.com/w160/eu.png',
     code: 'EUR',
     universitiesHub: 'Germany, France, Ireland, Italy, Poland',
     baggageAllowance: 'Up to 40kg on select carriers',

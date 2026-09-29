@@ -14,9 +14,6 @@ export const WhatsAppButton: React.FC = () => {
         aria-label="Chat with World Air on WhatsApp"
         className="group relative flex items-center bg-[#25D366] hover:bg-[#20ba5a] text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-emerald-300"
       >
-        {/* Subtle Pulse Ring */}
-        <span className="absolute -inset-1 rounded-full bg-[#25D366]/40 animate-ping pointer-events-none opacity-75" />
-
         {/* WhatsApp Icon (SVG for perfect branding) */}
         <svg
           className="w-6 h-6 shrink-0 fill-current drop-shadow-xs"
@@ -27,7 +24,7 @@ export const WhatsAppButton: React.FC = () => {
 
         {/* Text on Desktop */}
         <span className="hidden sm:inline-block ml-2.5 text-xs font-bold uppercase tracking-wider text-white select-none">
-          Chat with World Air
+          WhatsApp
         </span>
       </a>
     </aside>

@@ -74,9 +74,31 @@ export const DestinationsSection: React.FC<DestinationsSectionProps> = ({
               {/* Multi-layered cinematic gradient for text contrast */}
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-transparent group-hover:from-stone-950/95 transition-all duration-300" />
 
-              {/* Top Tag & Flag */}
+              {/* Top Tag & Original Flag Image */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                <span className="text-2xl filter drop-shadow">{dest.flag}</span>
+                <div className="w-8 h-5.5 rounded overflow-hidden shadow-md border border-white/40 bg-stone-900/80">
+                  <img
+                    src={`https://flagcdn.com/w80/${
+                      dest.id === 'tokyo' ? 'jp' :
+                      dest.id === 'london' ? 'gb' :
+                      dest.id === 'melbourne' ? 'au' :
+                      dest.id === 'dubai' ? 'ae' :
+                      dest.id === 'singapore' ? 'sg' :
+                      dest.id === 'bangkok' ? 'th' :
+                      dest.id === 'kuala-lumpur' ? 'my' :
+                      dest.id === 'male' ? 'mv' :
+                      dest.id === 'doha' ? 'qa' :
+                      dest.id === 'muscat' ? 'om' :
+                      dest.id === 'kuwait' ? 'kw' :
+                      dest.id === 'delhi' ? 'in' :
+                      dest.id === 'new-york' ? 'us' :
+                      dest.id === 'montreal' ? 'ca' : 'lk'
+                    }.png`}
+                    alt={dest.country}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
                 {dest.tag && (
                   <span className="bg-stone-900/80 backdrop-blur-md border border-stone-700 text-amber-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow">
                     {dest.tag}

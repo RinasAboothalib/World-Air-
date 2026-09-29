@@ -164,7 +164,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     const found = POPULAR_AIRPORTS.find((a) => a.code === e.target.value);
                     if (found) setFromCity(`${found.city}, ${found.country} (${found.code})`);
                   }}
-                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded text-sm font-semibold text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer"
+                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-sm font-semibold text-stone-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer transition-all"
                 >
                   <option value="CMB">Colombo, Sri Lanka (CMB)</option>
                   <option value="LHR">London Heathrow, UK (LHR)</option>
@@ -181,7 +181,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                 type="button"
                 onClick={handleSwapAirports}
                 title="Swap departure and arrival"
-                className="p-2 rounded-full border border-stone-200 text-stone-500 hover:text-red-700 hover:border-red-300 hover:bg-stone-50 transition-all cursor-pointer"
+                className="p-2.5 rounded-full border border-stone-300 bg-stone-50 shadow-xs text-stone-600 hover:text-red-700 hover:border-red-400 hover:bg-stone-100 transition-all cursor-pointer"
               >
                 <ArrowRightLeft className="w-4 h-4" />
               </button>
@@ -201,7 +201,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     const found = POPULAR_AIRPORTS.find((a) => a.code === e.target.value);
                     if (found) setToCity(`${found.city} (${found.code})`);
                   }}
-                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-300 rounded text-sm font-semibold text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer"
+                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-sm font-semibold text-stone-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer transition-all"
                 >
                   {POPULAR_AIRPORTS.filter((a) => a.code !== fromCode).map((airport) => (
                     <option key={airport.code} value={airport.code}>
@@ -224,7 +224,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     type="date"
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
-                    className="w-full pl-8 pr-2 py-2.5 bg-stone-50 border border-stone-300 rounded text-xs font-semibold text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="w-full pl-8 pr-2 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-xs font-semibold text-stone-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-600 transition-all"
                   />
                 </div>
               </div>
@@ -240,7 +240,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     disabled={tripType === 'one-way'}
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    className={`w-full pl-8 pr-2 py-2.5 bg-stone-50 border border-stone-300 rounded text-xs font-semibold ${
+                    className={`w-full pl-8 pr-2 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-xs font-semibold shadow-inner transition-all ${
                       tripType === 'one-way'
                         ? 'opacity-40 cursor-not-allowed bg-stone-100'
                         : 'text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600'
@@ -258,7 +258,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
               <button
                 type="button"
                 onClick={() => setShowPassengerPopover(!showPassengerPopover)}
-                className="w-full px-3 py-2.5 bg-stone-50 border border-stone-300 rounded text-xs font-semibold text-stone-900 flex items-center justify-between hover:bg-stone-100 transition-colors cursor-pointer text-left"
+                className="w-full px-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-xs font-semibold text-stone-900 shadow-inner flex items-center justify-between hover:bg-stone-100 transition-colors cursor-pointer text-left"
               >
                 <span className="truncate">
                   {totalPassengers} Pax · {cabinClass.replace('-', ' ').toUpperCase()}
@@ -399,7 +399,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                   key={item.code}
                   type="button"
                   onClick={() => handleSelectDestination(item.code, item.city)}
-                  className={`px-2.5 py-1 rounded text-xs transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                     toCode === item.code
                       ? 'bg-red-50 text-red-700 border border-red-200 font-bold'
                       : 'hover:bg-stone-100 text-stone-600 border border-stone-200'
@@ -414,7 +414,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <button
                 type="submit"
-                className="w-full sm:w-auto bg-red-700 hover:bg-red-800 text-white font-semibold text-xs uppercase tracking-wider px-7 py-3 rounded shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-red-800"
+                className="w-full sm:w-auto bg-red-700 hover:bg-red-800 text-white font-semibold text-xs uppercase tracking-wider px-7 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-red-800"
               >
                 <Search className="w-4 h-4" />
                 <span>Search Flights</span>
@@ -436,7 +436,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     isStudentFare,
                   })
                 }
-                className="w-full sm:w-auto bg-stone-900 hover:bg-stone-800 text-stone-100 font-semibold text-xs uppercase tracking-wider px-5 py-3 rounded transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-stone-800"
+                className="w-full sm:w-auto bg-stone-900 hover:bg-stone-800 text-stone-100 font-semibold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-stone-800"
               >
                 <Send className="w-3.5 h-3.5 text-amber-400" />
                 <span>Request a Quote</span>

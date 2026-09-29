@@ -4,11 +4,29 @@ import { RouteNode } from '../types';
 import * as d3Geo from 'd3-geo';
 import * as topojson from 'topojson-client';
 import worldData from 'world-atlas/countries-110m.json';
-import { Plane, Compass, ArrowRight, Clock, Navigation, Sparkles, MapPin, Globe } from 'lucide-react';
+import { Plane, Compass, ArrowRight, Clock, Navigation, Sparkles, Globe } from 'lucide-react';
 
 interface RouteMapSectionProps {
   onSelectRoute: (origin: string, destination: string) => void;
 }
+
+const AIRPORT_FLAG_CODES: Record<string, string> = {
+  CMB: 'lk',
+  LHR: 'gb',
+  MEL: 'au',
+  NRT: 'jp',
+  DXB: 'ae',
+  DOH: 'qa',
+  MCT: 'om',
+  KWI: 'kw',
+  DEL: 'in',
+  MLE: 'mv',
+  BKK: 'th',
+  SIN: 'sg',
+  KUL: 'my',
+  JFK: 'us',
+  YUL: 'ca',
+};
 
 export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute }) => {
   const [activeNodeId, setActiveNodeId] = useState<string>('LHR');
@@ -23,15 +41,13 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
   const height = 540;
 
   // Real geographic equirectangular projection centered to showcase global routes from Sri Lanka
-  const { pathGenerator, countriesPath, landPath, graticulePath, equatorY } = useMemo(() => {
-    // Equirectangular projection: scale 158 translates nicely across 1000x540
+  const { countriesPath, landPath, graticulePath, equatorY } = useMemo(() => {
     const projection = d3Geo.geoEquirectangular()
       .scale(158)
       .translate([width / 2, height / 2 + 10]);
 
     const pathGen = d3Geo.geoPath(projection);
 
-    // Convert topojson land & country features to SVG paths
     const landFeature = topojson.feature(worldData as any, (worldData as any).objects.land);
     const countriesFeature = topojson.feature(worldData as any, (worldData as any).objects.countries);
     const graticule = d3Geo.geoGraticule10();
@@ -40,13 +56,11 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
     const lPath = pathGen(landFeature) || '';
     const gPath = pathGen(graticule) || '';
 
-    // Calculate equator line Y
     const equatorPt = projection([0, 0]);
     const eqY = equatorPt ? equatorPt[1] : height / 2;
 
     return {
       projection,
-      pathGenerator: pathGen,
       countriesPath: cPath,
       landPath: lPath,
       graticulePath: gPath,
@@ -68,14 +82,14 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
         ...node,
         x: pt[0],
         y: pt[1],
+        flagCode: AIRPORT_FLAG_CODES[node.id] || 'lk',
+        flagImg: `https://flagcdn.com/w40/${AIRPORT_FLAG_CODES[node.id] || 'lk'}.png`,
       };
     });
 
-    // Build great-circle paths from Colombo (CMB)
     const pathsMap: Record<string, { pathString: string; points: [number, number][] }> = {};
 
     destinations.forEach((dest) => {
-      // Interpolate along the sphere geodesic
       const interpolator = d3Geo.geoInterpolate(hub.coordinates, dest.coordinates);
       const pointsCount = 28;
       const pts: [number, number][] = [];
@@ -88,7 +102,6 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
         }
       }
 
-      // Format SVG path string
       let d = '';
       pts.forEach((p, idx) => {
         d += `${idx === 0 ? 'M' : 'L'} ${p[0].toFixed(1)} ${p[1].toFixed(1)} `;
@@ -108,6 +121,7 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
   }, [hub, destinations]);
 
   const activePathString = routeData.paths[activeNodeId]?.pathString || '';
+  const selectedFlagImg = `https://flagcdn.com/w40/${AIRPORT_FLAG_CODES[selectedDest.id] || 'lk'}.png`;
 
   return (
     <section id="routes" className="py-24 bg-stone-950 text-white relative overflow-hidden border-t border-stone-800">
@@ -138,8 +152,13 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
               <span className="text-xs font-bold uppercase tracking-wider text-stone-400">
                 Primary Flight Hub:
               </span>
-              <span className="bg-red-700/90 text-white text-xs font-bold px-3 py-1 rounded-md flex items-center gap-1.5 shadow-sm border border-red-600">
-                <span>🇱🇰 Colombo (CMB)</span>
+              <span className="bg-red-700/90 text-white text-xs font-bold px-3 py-1 rounded-md flex items-center gap-2 shadow-sm border border-red-600">
+                <img
+                  src="https://flagcdn.com/w40/lk.png"
+                  alt="Sri Lanka Flag"
+                  className="w-4 h-3 object-cover rounded-xs border border-white/20"
+                />
+                <span>Colombo (CMB)</span>
                 <span className="text-[10px] text-amber-200">· 6.9°N, 79.8°E</span>
               </span>
             </div>
@@ -163,12 +182,10 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
               aria-label="Real World Flight Map"
             >
               <defs>
-                {/* Glow filter for active flight line */}
                 <filter id="routeGlow" x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="3" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                {/* Radial gradient for Colombo hub */}
                 <radialGradient id="hubBeacon">
                   <stop offset="0%" stopColor="#EF4444" stopOpacity="0.8" />
                   <stop offset="60%" stopColor="#DC2626" stopOpacity="0.3" />
@@ -211,7 +228,6 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                 fill="#181e2b"
                 stroke="#222b3d"
                 strokeWidth="0.8"
-                className="transition-colors duration-500"
               />
 
               {/* Real Country Borders */}
@@ -244,7 +260,6 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
               {/* Active Selected Flight Path (Glowing Great Circle) */}
               {activePathString && (
                 <>
-                  {/* Subtle outer glow */}
                   <path
                     d={activePathString}
                     fill="none"
@@ -253,7 +268,6 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                     strokeOpacity="0.4"
                     filter="url(#routeGlow)"
                   />
-                  {/* High contrast bright animated dashed line */}
                   <path
                     d={activePathString}
                     fill="none"
@@ -263,7 +277,7 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                     className="animate-flight-dash"
                   />
 
-                  {/* Animated Commercial Jet Icon Moving along the Great Circle Path */}
+                  {/* Animated Commercial Jet */}
                   <g>
                     <circle r="4" fill="#F59E0B" className="animate-ping">
                       <animateMotion
@@ -290,6 +304,8 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
               {routeData.nodes.filter((n) => !n.isHub).map((node) => {
                 const isSelected = node.id === activeNodeId;
                 const isHovered = node.id === hoveredNodeId;
+                const flagSrc = `https://flagcdn.com/w40/${node.flagCode}.png`;
+                const labelWidth = node.name.length * 6.5 + 24;
 
                 return (
                   <g
@@ -300,10 +316,8 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
                   >
-                    {/* Interactive Click Target Area */}
                     <circle cx="0" cy="0" r="16" fill="transparent" />
 
-                    {/* Pulse ring when selected */}
                     {isSelected && (
                       <circle
                         cx="0"
@@ -314,7 +328,6 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                       />
                     )}
 
-                    {/* Outer Node Circle */}
                     <circle
                       cx="0"
                       cy="0"
@@ -322,30 +335,39 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                       fill={isSelected ? '#F59E0B' : '#DC2626'}
                       stroke="#FFFFFF"
                       strokeWidth="1.5"
-                      className="transition-all duration-200"
                     />
 
-                    {/* Airport Label with Dark Pill Background for Readability */}
-                    <g transform={`translate(${node.x > width - 100 ? -48 : 8}, ${node.y < 40 ? 12 : -6})`}>
+                    {/* Airport Label with Original Flag Image */}
+                    <g transform={`translate(${node.x > width - 100 ? -labelWidth : 8}, ${node.y < 40 ? 12 : -6})`}>
                       <rect
                         x="-3"
                         y="-10"
-                        width={node.name.length * 6.5 + 16}
-                        height="15"
+                        width={labelWidth}
+                        height="16"
                         rx="3"
-                        fill="rgba(12, 16, 23, 0.85)"
-                        stroke={isSelected ? '#F59E0B' : 'rgba(255,255,255,0.15)'}
-                        strokeWidth={isSelected ? '1' : '0.5'}
+                        fill="rgba(12, 16, 23, 0.9)"
+                        stroke={isSelected ? '#F59E0B' : 'rgba(255,255,255,0.2)'}
+                        strokeWidth={isSelected ? '1.2' : '0.6'}
                       />
+                      {/* Original Flag Image */}
+                      <image
+                        href={flagSrc}
+                        x="2"
+                        y="-7"
+                        width="12"
+                        height="9"
+                        preserveAspectRatio="none"
+                      />
+                      {/* City Name */}
                       <text
-                        x="3"
-                        y="1"
-                        fill={isSelected ? '#F59E0B' : '#E5E7EB'}
+                        x="18"
+                        y="1.5"
+                        fill={isSelected ? '#F59E0B' : '#FFFFFF'}
                         fontSize="9.5"
                         fontWeight={isSelected ? 'bold' : '600'}
                         fontFamily="Inter, sans-serif"
                       >
-                        {node.flag} {node.name}
+                        {node.name}
                       </text>
                     </g>
                   </g>
@@ -355,35 +377,42 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
               {/* Sri Lanka Colombo (CMB) Hub Node */}
               {routeData.hubPoint && (
                 <g transform={`translate(${routeData.hubPoint[0]}, ${routeData.hubPoint[1]})`}>
-                  {/* Expanding Radar Rings */}
                   <circle cx="0" cy="0" r="22" fill="url(#hubBeacon)" className="animate-ping" />
                   <circle cx="0" cy="0" r="14" fill="rgba(166, 25, 46, 0.3)" />
                   <circle cx="0" cy="0" r="8" fill="#A6192E" stroke="#FFFFFF" strokeWidth="2" />
                   <circle cx="0" cy="0" r="3" fill="#FFFFFF" />
 
-                  {/* Colombo Hub Label Badge */}
+                  {/* Colombo Hub Label Badge with Original Sri Lanka Flag */}
                   <g transform="translate(12, 4)">
                     <rect
                       x="-4"
                       y="-12"
-                      width="122"
-                      height="18"
+                      width="126"
+                      height="19"
                       rx="4"
                       fill="#A6192E"
                       stroke="#FFFFFF"
-                      strokeWidth="1"
+                      strokeWidth="1.2"
                       className="shadow-lg"
                     />
+                    <image
+                      href="https://flagcdn.com/w40/lk.png"
+                      x="2"
+                      y="-8"
+                      width="14"
+                      height="10"
+                      preserveAspectRatio="none"
+                    />
                     <text
-                      x="3"
-                      y="1"
+                      x="20"
+                      y="1.5"
                       fill="#FFFFFF"
-                      fontSize="10"
+                      fontSize="9.5"
                       fontWeight="bold"
                       fontFamily="Inter, sans-serif"
                       letterSpacing="0.5"
                     >
-                      🇱🇰 COLOMBO (CMB)
+                      COLOMBO (CMB)
                     </text>
                   </g>
                 </g>
@@ -397,8 +426,13 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Selected International Route</span>
                 </span>
-                <span className="text-xs font-mono font-bold text-white bg-stone-800 px-2 py-0.5 rounded border border-stone-700">
-                  {selectedDest.flag} {selectedDest.id}
+                <span className="text-xs font-mono font-bold text-white bg-stone-800 px-2 py-0.5 rounded border border-stone-700 flex items-center gap-1.5">
+                  <img
+                    src={selectedFlagImg}
+                    alt={selectedDest.country}
+                    className="w-4 h-3 object-cover rounded-xs"
+                  />
+                  <span>{selectedDest.id}</span>
                 </span>
               </div>
 
@@ -443,27 +477,38 @@ export const RouteMapSection: React.FC<RouteMapSectionProps> = ({ onSelectRoute 
             </div>
           </div>
 
-          {/* Quick Route Selector Strip */}
-          <div className="mt-4 pt-3 border-t border-stone-800/80 flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-bold text-stone-400 mr-2 flex items-center gap-1">
-              <Navigation className="w-3 h-3 text-red-500" />
+          {/* Quick Route Selector Strip with Original Country Flags */}
+          <div className="mt-4 pt-3 border-t border-stone-800/80 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-stone-400 mr-1 flex items-center gap-1.5">
+              <Navigation className="w-3.5 h-3.5 text-red-500" />
               <span>Select Airport:</span>
             </span>
-            {destinations.map((node) => (
-              <button
-                key={node.id}
-                type="button"
-                onClick={() => setActiveNodeId(node.id)}
-                className={`px-2.5 py-1 text-xs rounded-md transition-all cursor-pointer ${
-                  node.id === activeNodeId
-                    ? 'bg-amber-500/25 text-amber-300 border border-amber-400/60 font-bold shadow-xs'
-                    : 'bg-stone-800/80 text-stone-300 hover:text-white hover:bg-stone-700 border border-stone-700'
-                }`}
-              >
-                <span>{node.flag}</span>
-                <span className="ml-1">{node.name}</span>
-              </button>
-            ))}
+            {destinations.map((node) => {
+              const flagCode = AIRPORT_FLAG_CODES[node.id] || 'lk';
+              const flagSrc = `https://flagcdn.com/w40/${flagCode}.png`;
+              const isSelected = node.id === activeNodeId;
+
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  onClick={() => setActiveNodeId(node.id)}
+                  className={`px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-amber-500/25 text-amber-300 border border-amber-400/60 font-bold shadow-xs'
+                      : 'bg-stone-800/80 text-stone-300 hover:text-white hover:bg-stone-700 border border-stone-700'
+                  }`}
+                >
+                  <img
+                    src={flagSrc}
+                    alt={node.country}
+                    className="w-4 h-3 object-cover rounded-xs border border-white/20 shrink-0 shadow-xs"
+                    loading="lazy"
+                  />
+                  <span>{node.name}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

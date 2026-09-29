@@ -72,7 +72,7 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
           </p>
         </div>
 
-        {/* Destination Grid (8 Destination Cards) */}
+        {/* Destination Grid (8 Destination Cards with Original Country Flags) */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10">
           {STUDENT_DESTINATIONS.map((dest) => {
             const isSelected = selectedCountry.country === dest.country;
@@ -81,18 +81,24 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
                 key={dest.country}
                 type="button"
                 onClick={() => setSelectedCountry(dest)}
-                className={`p-3.5 rounded-xl border text-center transition-all duration-300 flex flex-col items-center justify-center cursor-pointer ${
+                className={`p-2.5 sm:p-3 rounded-xl border text-center transition-all duration-300 flex flex-col items-center justify-between cursor-pointer ${
                   isSelected
                     ? 'bg-red-700/90 border-red-500 shadow-lg shadow-red-900/40 scale-105 ring-2 ring-amber-400/50'
-                    : 'bg-stone-800/70 border-stone-700 hover:bg-stone-800 hover:border-stone-500'
+                    : 'bg-stone-800/80 border-stone-700 hover:bg-stone-800 hover:border-stone-500'
                 }`}
               >
-                <span className="text-3xl mb-1.5 block filter drop-shadow">{dest.flag}</span>
-                <span className="text-xs font-bold text-white tracking-wide block">
+                {/* Original Country Flag fitting the box */}
+                <div className="w-full h-11 sm:h-12 rounded-lg overflow-hidden mb-2 border border-white/20 shadow-xs bg-stone-900 flex items-center justify-center">
+                  <img
+                    src={dest.flagImg}
+                    alt={`${dest.country} flag`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                {/* Full Country Name Only */}
+                <span className="text-xs font-bold text-white tracking-wide block leading-tight">
                   {dest.country}
-                </span>
-                <span className="text-[10px] text-stone-300 block mt-0.5">
-                  {dest.code}
                 </span>
               </button>
             );
@@ -104,11 +110,17 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Details */}
             <div className="lg:col-span-8">
-              <div className="flex flex-wrap items-center gap-3 mb-4">
-                <span className="text-4xl">{selectedCountry.flag}</span>
+              <div className="flex flex-wrap items-center gap-3.5 mb-4">
+                <div className="w-14 h-9 sm:w-16 sm:h-10 rounded-lg overflow-hidden shadow-md border-2 border-white/30 shrink-0">
+                  <img
+                    src={selectedCountry.flagImg}
+                    alt={`${selectedCountry.country} flag`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div>
                   <h3 className="text-2xl font-bold text-white font-serif-luxury">
-                    Study in {selectedCountry.country} ({selectedCountry.code})
+                    Study in {selectedCountry.country}
                   </h3>
                   <p className="text-xs text-stone-400">
                     Key University Hubs: {selectedCountry.universitiesHub}
