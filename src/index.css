@@ -46,6 +46,24 @@
   animation: flightDash 2s linear infinite;
 }
 
+/* WhatsApp blinking & attention pulse */
+@keyframes whatsappBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.08);
+    box-shadow: 0 0 24px rgba(37, 211, 102, 0.85);
+  }
+}
+
+.animate-whatsapp-blink {
+  animation: whatsappBlink 1.4s ease-in-out infinite;
+}
+
 /* Smooth custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -60,4 +78,13 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #7f1d1d;
+}
+
+/* Utility to completely hide scrollbars where needed */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -3,7 +3,6 @@ import { STUDENT_DESTINATIONS } from '../data/mockData';
 import {
   GraduationCap,
   Luggage,
-  Sparkles,
   Plane,
   ArrowRight,
   ShieldCheck,
@@ -52,7 +51,7 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             <span className="inline-flex items-center gap-1.5 bg-red-800/90 border border-red-500 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
               SPECIAL STUDENT FARES
             </span>
             <span className="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg">
@@ -81,10 +80,10 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
                 key={dest.country}
                 type="button"
                 onClick={() => setSelectedCountry(dest)}
-                className={`p-2.5 sm:p-3 rounded-xl border text-center transition-all duration-300 flex flex-col items-center justify-between cursor-pointer ${
+                className={`p-2.5 sm:p-3 rounded-xl border-2 text-center transition-all duration-300 flex flex-col items-center justify-between cursor-pointer ${
                   isSelected
-                    ? 'bg-red-700/90 border-red-500 shadow-lg shadow-red-900/40 scale-105 ring-2 ring-amber-400/50'
-                    : 'bg-stone-800/80 border-stone-700 hover:bg-stone-800 hover:border-stone-500'
+                    ? 'bg-stone-800/95 border-red-600 ring-2 ring-red-600/50 shadow-lg shadow-red-950/50 scale-105'
+                    : 'bg-stone-800/80 border-stone-700/80 hover:bg-stone-800 hover:border-stone-500'
                 }`}
               >
                 {/* Original Country Flag fitting the box */}
@@ -97,7 +96,7 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
                   />
                 </div>
                 {/* Full Country Name Only */}
-                <span className="text-xs font-bold text-white tracking-wide block leading-tight">
+                <span className={`text-xs font-bold tracking-wide block leading-tight ${isSelected ? 'text-white' : 'text-stone-300'}`}>
                   {dest.country}
                 </span>
               </button>
@@ -177,7 +176,7 @@ export const StudentOffersSection: React.FC<StudentOffersSectionProps> = ({
 
               <button
                 onClick={() => onOpenStudentInquiry(selectedCountry.country)}
-                className="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3.5 px-4 rounded-lg text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 border border-red-600 cursor-pointer"
+                className="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 border border-red-600 cursor-pointer"
               >
                 <span>Ask About Student Fares</span>
                 <ArrowRight className="w-4 h-4" />

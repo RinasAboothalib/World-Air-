@@ -112,7 +112,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
           <div className="flex flex-wrap items-center justify-start gap-4 mb-10">
             <a
               href="#flight-search"
-              className="bg-red-700 hover:bg-red-800 text-white font-semibold px-7 py-3.5 rounded shadow-lg hover:shadow-red-900/30 transition-all flex items-center gap-2.5 text-sm uppercase tracking-wider group cursor-pointer border border-red-600"
+              className="bg-red-700 hover:bg-red-800 text-white font-semibold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-red-900/30 transition-all flex items-center gap-2.5 text-sm uppercase tracking-wider group cursor-pointer border border-red-600"
             >
               <Plane className="w-4 h-4 group-hover:-rotate-12 transition-transform" />
               <span>Book Your Flight</span>
@@ -121,7 +121,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
 
             <button
               onClick={() => onOpenInquiry('flight')}
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md font-semibold px-6 py-3.5 rounded transition-all flex items-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md font-semibold px-6 py-3.5 rounded-xl transition-all flex items-center gap-2 text-sm uppercase tracking-wider cursor-pointer"
             >
               <FileText className="w-4 h-4 text-amber-300" />
               <span>Get a Quote</span>
@@ -129,26 +129,26 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry }) => {
 
             <a
               href={`tel:${COMPANY_INFO.primaryTel}`}
-              className="bg-stone-900/80 hover:bg-stone-800 text-stone-200 border border-stone-700 px-5 py-3.5 rounded transition-all flex items-center gap-2 text-sm font-medium"
+              className="bg-stone-900/80 hover:bg-stone-800 text-stone-200 border border-stone-700 px-5 py-3.5 rounded-xl transition-all flex items-center gap-2 text-sm font-medium"
             >
               <Phone className="w-4 h-4 text-emerald-400" />
               <span>Call Now: {COMPANY_INFO.primaryPhone}</span>
             </a>
           </div>
 
-          {/* Trust Indicator Bar in Single Line */}
-          <div className="pt-6 border-t border-stone-800/80 flex items-center justify-start gap-x-4 xl:gap-x-6 text-xs text-stone-300 whitespace-nowrap overflow-x-auto pb-1">
-            <div className="flex items-center gap-2 shrink-0">
+          {/* Trust Indicator Bar - Fully Visible & Responsive (No Scrollbar) */}
+          <div className="pt-6 border-t border-stone-800/80 flex flex-wrap items-center justify-start gap-y-2 gap-x-3 sm:gap-x-5 text-xs text-stone-300">
+            <div className="flex items-center gap-2">
               <Award className="w-4 h-4 text-amber-400 shrink-0" />
               <span className="font-semibold text-stone-200">25+ Years of Industry Experience</span>
             </div>
-            <span className="text-stone-600 shrink-0">|</span>
-            <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:inline text-stone-600">|</span>
+            <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-red-400 shrink-0" />
               <span className="font-semibold text-stone-200">International Ticketing Specialists</span>
             </div>
-            <span className="text-stone-600 shrink-0">|</span>
-            <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:inline text-stone-600">|</span>
+            <div className="flex items-center gap-2">
               <Compass className="w-4 h-4 text-amber-400 shrink-0" />
               <span className="font-semibold text-stone-200">Sri Lanka's Established Travel Partner</span>
             </div>

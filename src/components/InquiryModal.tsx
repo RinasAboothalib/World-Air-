@@ -277,7 +277,7 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-red-700 hover:bg-red-800 disabled:opacity-60 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 border border-red-800 cursor-pointer"
+              className="w-full bg-red-700 hover:bg-red-800 disabled:opacity-60 text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 border border-red-800 cursor-pointer"
             >
               {isSubmitting ? (
                 <span>Generating Quote...</span>

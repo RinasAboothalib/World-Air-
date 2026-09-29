@@ -1,17 +1,22 @@
 import React from 'react';
 import { WorldAirLogo } from './WorldAirLogo';
 import { COMPANY_INFO } from '../data/mockData';
+import { PageId } from '../types';
 import { Phone, Mail, Globe, MapPin, ExternalLink, ShieldCheck, Heart } from 'lucide-react';
 
-export const Footer: React.FC = () => {
-  const quickLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'About', href: '#about' },
-    { name: 'Flight Booking', href: '#flight-search' },
-    { name: 'Student Offers', href: '#student-offers' },
-    { name: 'Visa Assistance', href: '#services' },
-    { name: 'Holiday Packages', href: '#services' },
-    { name: 'Contact', href: '#contact' },
+interface FooterProps {
+  onNavigate?: (page: PageId) => void;
+  onOpenInquiry?: (type?: 'flight' | 'student' | 'visa' | 'holiday') => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenInquiry }) => {
+  const quickLinks: { name: string; page: PageId }[] = [
+    { name: 'Home', page: 'home' },
+    { name: 'Flight Booking & Fares', page: 'booking' },
+    { name: 'About World Air', page: 'about' },
+    { name: 'Aviation Services', page: 'services' },
+    { name: 'Global Destinations', page: 'destinations' },
+    { name: 'Contact Colombo Office', page: 'contact' },
   ];
 
   const popularDestinations = [
@@ -39,10 +44,10 @@ export const Footer: React.FC = () => {
             </div>
 
             <h4 className="text-base font-bold text-white font-serif-luxury mb-1">
-              World Air (Pvt.) Ltd.
+              {COMPANY_INFO.name}
             </h4>
             <p className="text-xs text-amber-400 font-semibold uppercase tracking-wider mb-3">
-              25+ Years of Redefining Travel
+              {COMPANY_INFO.tagline}
             </p>
 
             <p className="text-xs text-stone-400 leading-relaxed max-w-sm mb-6">
@@ -66,10 +71,12 @@ export const Footer: React.FC = () => {
                 className="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center text-stone-300 hover:text-white hover:bg-emerald-600 hover:border-emerald-500 transition-colors"
                 aria-label="World Air WhatsApp"
               >
-                <span className="text-xs font-bold">WA</span>
+                <span className="font-bold text-xs">WA</span>
               </a>
               <a
-                href="https://worldair.lk"
+                href={`https://${COMPANY_INFO.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center text-stone-300 hover:text-white hover:bg-red-700 hover:border-red-600 transition-colors"
                 aria-label="World Air Official Website"
               >
@@ -86,12 +93,13 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-xs">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-stone-400 hover:text-white hover:underline transition-colors block py-0.5"
+                  <button
+                    type="button"
+                    onClick={() => onNavigate && onNavigate(link.page)}
+                    className="text-stone-400 hover:text-white transition-colors block py-0.5 text-left cursor-pointer hover:translate-x-0.5 transition-transform"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -104,13 +112,14 @@ export const Footer: React.FC = () => {
             </h4>
             <div className="grid grid-cols-2 gap-x-2 gap-y-2 text-xs">
               {popularDestinations.map((dest) => (
-                <a
+                <button
                   key={dest}
-                  href="#destinations"
-                  className="text-stone-400 hover:text-white hover:underline transition-colors block py-0.5"
+                  type="button"
+                  onClick={() => onNavigate && onNavigate('destinations')}
+                  className="text-stone-400 hover:text-white transition-colors block py-0.5 text-left cursor-pointer"
                 >
                   {dest}
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -121,47 +130,83 @@ export const Footer: React.FC = () => {
               Direct Contact
             </h4>
             <div className="space-y-3 text-xs">
-              <div>
-                <span className="text-stone-500 block text-[10px] uppercase font-bold">Office Line:</span>
-                <a href="tel:0812224616" className="text-stone-200 hover:text-red-400 font-semibold">
-                  0812 224 616
-                </a>
+              <div className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <span className="text-stone-400">
+                  {COMPANY_INFO.address}
+                </span>
               </div>
 
-              <div>
-                <span className="text-stone-500 block text-[10px] uppercase font-bold">Mobile & WhatsApp Hotline:</span>
-                <a href="tel:+94777362822" className="text-white hover:text-emerald-400 font-bold text-sm block">
-                  +94 777 362 822
-                </a>
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
+                <div>
+                  <a
+                    href={`tel:${COMPANY_INFO.primaryTel}`}
+                    className="text-white hover:text-amber-400 font-semibold transition-colors block"
+                  >
+                    {COMPANY_INFO.primaryPhone}
+                  </a>
+                  <a
+                    href="tel:0812224616"
+                    className="text-stone-400 hover:text-white transition-colors block text-[11px]"
+                  >
+                    0812 224 616 (Office)
+                  </a>
+                </div>
               </div>
 
-              <div>
-                <span className="text-stone-500 block text-[10px] uppercase font-bold">Ticketing & Reservations:</span>
-                <a href="tel:+94777372316" className="text-stone-200 hover:text-red-400 font-semibold">
-                  +94 777 372 316
-                </a>
-              </div>
-
-              <div className="pt-1">
-                <span className="text-stone-500 block text-[10px] uppercase font-bold">Inquiries Email:</span>
-                <a href={`mailto:${COMPANY_INFO.email}`} className="text-stone-200 hover:text-amber-300">
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-amber-500 shrink-0" />
+                <a
+                  href={`mailto:${COMPANY_INFO.email}`}
+                  className="text-stone-400 hover:text-white transition-colors"
+                >
                   {COMPANY_INFO.email}
                 </a>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => onOpenInquiry && onOpenInquiry('flight')}
+                  className="w-full bg-stone-900 hover:bg-stone-800 text-stone-200 text-xs font-bold py-2 px-3 rounded-lg border border-stone-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Request Custom Itinerary</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Copyright & Verification Notice */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
-          <p>© 2026 World Air (Pvt.) Ltd. All Rights Reserved.</p>
-          <div className="flex items-center gap-4 text-[11px]">
-            <span>Official Sri Lanka Travel Agency</span>
+        {/* Accreditation & License Badges */}
+        <div className="py-6 border-b border-stone-800/80 flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-stone-400">
+            <span className="flex items-center gap-1.5 text-stone-300">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Civil Aviation Authority Licensed: <strong>A-789</strong></span>
+            </span>
             <span>·</span>
-            <span>International Airline Tickets & Student Fares</span>
+            <span>Registered Under PV 66318</span>
             <span>·</span>
-            <span className="text-stone-400">worldair.lk</span>
+            <span>Official Sri Lanka Tourism Promotion Partner</span>
           </div>
+
+          <div className="text-[11px] text-stone-500">
+            Operating Hours: 24/7 Ticketing & Assistance Hotline
+          </div>
+        </div>
+
+        {/* Bottom Bar: Copyright */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+          <p>
+            © {new Date().getFullYear()} {COMPANY_INFO.name}. All rights reserved.
+          </p>
+
+          <p className="flex items-center gap-1.5">
+            <span>Redefining Sri Lankan aviation & global travel since 1999</span>
+            <Heart className="w-3 h-3 text-red-600 fill-red-600 inline" />
+          </p>
         </div>
       </div>
     </footer>

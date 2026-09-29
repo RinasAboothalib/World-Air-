@@ -1,32 +1,37 @@
 import React from 'react';
 import { COMPANY_INFO } from '../data/mockData';
-import { MessageSquare } from 'lucide-react';
 
 export const WhatsAppButton: React.FC = () => {
   const defaultMessage = 'Hello World Air! I would like to inquire about international flight bookings and student airfares.';
 
   return (
     <aside aria-label="WhatsApp live chat support" className="fixed bottom-6 right-6 z-50">
-      <a
-        href={`https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat with World Air on WhatsApp"
-        className="group relative flex items-center bg-[#25D366] hover:bg-[#20ba5a] text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-emerald-300"
-      >
-        {/* WhatsApp Icon (SVG for perfect branding) */}
-        <svg
-          className="w-6 h-6 shrink-0 fill-current drop-shadow-xs"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.099-2.022-.444-1.777-.696-2.909-2.508-3.003-2.628-.093-.12-0.728-.971-.728-1.85 0-.88.461-1.314.625-1.492.164-.179.358-.224.478-.224.12 0 .239.002.343.007.109.006.255-.041.399.304.149.359.508 1.238.552 1.328.045.089.075.194.015.313-.06.12-.089.194-.179.3-.089.105-.189.233-.269.313-.089.089-.182.186-.078.365.104.179.462.763.992 1.236.684.609 1.261.798 1.44 0.888.179.089.284.075.389-.045.105-.119.448-.522.567-.701.119-.179.239-.149.399-.089.16.06 1.015.478 1.189.565.174.088.291.132.334.208.045.076.045.437-.099.842z" />
-        </svg>
+      <div className="relative flex items-center justify-center">
+        {/* Blinking radar wave ring */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-75 animate-ping pointer-events-none" />
 
-        {/* Text on Desktop */}
-        <span className="hidden sm:inline-block ml-2.5 text-xs font-bold uppercase tracking-wider text-white select-none">
-          WhatsApp
-        </span>
-      </a>
+        {/* Ambient pulse glow */}
+        <span className="absolute -inset-1 rounded-full bg-[#25D366]/40 blur-xs animate-pulse pointer-events-none" />
+
+        {/* Circular WhatsApp Icon Button with Blink Animation */}
+        <a
+          href={`https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+          title="Chat with World Air on WhatsApp"
+          className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-2xl transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-emerald-300 animate-whatsapp-blink cursor-pointer z-10"
+        >
+          {/* Official WhatsApp SVG Icon */}
+          <svg
+            className="w-7 h-7 sm:w-8 sm:h-8 fill-current drop-shadow-md"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+        </a>
+      </div>
     </aside>
   );
 };

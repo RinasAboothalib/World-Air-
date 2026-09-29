@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { WorldAirLogo } from './WorldAirLogo';
 import { COMPANY_INFO } from '../data/mockData';
-import { Phone, Menu, X, Plane, Send, Globe, ChevronRight } from 'lucide-react';
+import { PageId } from '../types';
+import { Phone, Menu, X, Plane, Send, Globe } from 'lucide-react';
 
 interface NavbarProps {
+  currentPage: PageId;
+  onNavigate: (page: PageId) => void;
   onOpenInquiry: (initialType?: 'flight' | 'student' | 'visa' | 'holiday') => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentPage,
+  onNavigate,
+  onOpenInquiry,
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -23,16 +30,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'About', href: '#about' },
-    { name: 'Flight Booking', href: '#flight-search' },
-    { name: 'Student Offers', href: '#student-offers' },
-    { name: 'Services', href: '#services' },
-    { name: 'Destinations', href: '#destinations' },
-    { name: 'Route Map', href: '#routes' },
-    { name: 'Contact', href: '#contact' },
+  // Removed "Student offer" and "Route map" as requested
+  const navLinks: { name: string; page: PageId }[] = [
+    { name: 'Home', page: 'home' },
+    { name: 'Flight Booking', page: 'booking' },
+    { name: 'About', page: 'about' },
+    { name: 'Services', page: 'services' },
+    { name: 'Destinations', page: 'destinations' },
+    { name: 'Contact', page: 'contact' },
   ];
+
+  const handleLinkClick = (page: PageId) => {
+    onNavigate(page);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -93,96 +104,110 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry }) => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          {/* Brand Logo - Official Framed World Air Mark */}
-          <a
-            href="#hero"
-            className="flex items-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 rounded transition-transform hover:scale-[1.02]"
+          {/* Brand Logo */}
+          <button
+            type="button"
+            onClick={() => handleLinkClick('home')}
+            className="flex items-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 rounded transition-transform hover:scale-[1.02] cursor-pointer text-left"
             aria-label="World Air Home"
           >
             <WorldAirLogo
               variant="red"
               height={scrolled ? 42 : 48}
             />
-          </a>
-
-          {/* Center Navigation Links (strictly non-wrapping with clean spacing) */}
-          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 shrink-0">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-stone-700 hover:text-red-700 text-[13px] xl:text-sm font-semibold tracking-normal transition-colors whitespace-nowrap py-1 relative hover:after:w-full after:w-0 after:h-0.5 after:bg-red-700 after:absolute after:bottom-0 after:left-0 after:transition-all"
-              >
-                {link.name}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right Action CTAs */}
-          <div className="hidden sm:flex items-center gap-2.5 shrink-0">
-            <button
-              onClick={() => onOpenInquiry('flight')}
-              className="whitespace-nowrap bg-red-700 hover:bg-red-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded shadow-sm hover:shadow transition-all flex items-center gap-1.5 border border-red-800 cursor-pointer"
-            >
-              <Plane className="w-3.5 h-3.5" />
-              <span>Book Flight</span>
-            </button>
-
-            <button
-              onClick={() => onOpenInquiry('flight')}
-              className="hidden xl:inline-flex whitespace-nowrap items-center gap-1.5 text-xs font-semibold text-stone-700 hover:text-red-700 border border-stone-300 hover:border-red-400 px-3.5 py-2.5 rounded transition-all bg-stone-50 hover:bg-white cursor-pointer"
-            >
-              <Send className="w-3 h-3 text-red-600" />
-              <span>Get a Quote</span>
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-stone-700 hover:text-red-700 hover:bg-stone-100 rounded-lg transition-colors focus:outline-none"
-            aria-label="Toggle navigation menu"
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-        </div>
 
-        {/* Mobile Animated Dropdown */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-stone-200 shadow-xl px-4 pt-3 pb-6 animate-in slide-in-from-top-2 duration-200">
-            <div className="flex flex-col space-y-1 mb-4">
-              {navLinks.map((link) => (
-                <a
+          {/* Desktop Navigation Links with Active Page Highlighting */}
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
+            {navLinks.map((link) => {
+              const isActive = currentPage === link.page;
+              return (
+                <button
                   key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 text-sm font-semibold text-stone-800 hover:text-red-700 hover:bg-stone-50 rounded-md transition-colors flex items-center justify-between"
+                  type="button"
+                  onClick={() => handleLinkClick(link.page)}
+                  className={`text-sm font-semibold tracking-normal transition-all py-1.5 px-3 rounded-lg relative cursor-pointer flex items-center gap-1.5 ${
+                    isActive
+                      ? 'text-red-700 bg-red-50 font-bold shadow-xs'
+                      : 'text-stone-700 hover:text-red-700 hover:bg-stone-50'
+                  }`}
                 >
                   <span>{link.name}</span>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
-                </a>
-              ))}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-red-700 rounded-full" />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* CTA & Mobile Menu Toggle */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => handleLinkClick('booking')}
+              className="bg-red-700 hover:bg-red-800 text-white text-xs font-bold py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-xl uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer border border-red-600 active:scale-95"
+            >
+              <Plane className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Book Flight</span>
+              <span className="sm:hidden">Book</span>
+            </button>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg text-stone-700 hover:text-red-700 hover:bg-stone-100 transition-colors focus:outline-none cursor-pointer"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-white border-b border-stone-200 shadow-xl px-4 pt-3 pb-6 animate-in slide-in-from-top duration-200">
+            <div className="flex flex-col space-y-1">
+              {navLinks.map((link) => {
+                const isActive = currentPage === link.page;
+                return (
+                  <button
+                    key={link.name}
+                    type="button"
+                    onClick={() => handleLinkClick(link.page)}
+                    className={`px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-between transition-colors text-left cursor-pointer ${
+                      isActive
+                        ? 'bg-red-50 text-red-700 font-bold'
+                        : 'text-stone-800 hover:text-red-700 hover:bg-stone-50'
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-red-700" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="pt-3 border-t border-stone-100 flex flex-col gap-2.5">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenInquiry('flight');
-                }}
-                className="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3 px-4 rounded text-center text-xs uppercase tracking-wider shadow flex items-center justify-center gap-2"
-              >
-                <Plane className="w-4 h-4" />
-                <span>Book Flight / Get Quote</span>
-              </button>
-
+            <div className="mt-4 pt-4 border-t border-stone-200 space-y-2">
               <a
                 href={`tel:${COMPANY_INFO.primaryTel}`}
-                className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold py-2.5 px-4 rounded text-center text-xs flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-stone-100 text-stone-800 text-xs font-bold"
               >
-                <Phone className="w-4 h-4 text-red-600" />
+                <Phone className="w-4 h-4 text-emerald-600" />
                 <span>Call Hotline: {COMPANY_INFO.primaryPhone}</span>
+              </a>
+
+              <a
+                href={`https://wa.me/${COMPANY_INFO.whatsappNumber}?text=Hello%20World%20Air,%20I%20would%20like%20to%20inquire%20about%20tickets.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-emerald-600 text-white text-xs font-bold shadow-sm"
+              >
+                <Send className="w-4 h-4" />
+                <span>Chat via WhatsApp</span>
               </a>
             </div>
           </div>

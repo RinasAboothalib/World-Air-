@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plane, GraduationCap, FileCheck2, Palmtree, ArrowRight, Check, Sparkles, Luggage } from 'lucide-react';
+import { Plane, GraduationCap, FileCheck2, Palmtree, ArrowRight, Check, Luggage } from 'lucide-react';
 
 interface ServicesSectionProps {
   onSelectService: (serviceType: 'flight' | 'student' | 'visa' | 'holiday') => void;
@@ -97,7 +97,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
           <div className="group bg-gradient-to-b from-amber-50/40 via-stone-50 to-stone-50 border-2 border-amber-300/80 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden">
             {/* Student Special Badge */}
             <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gradient-to-r from-amber-600 to-amber-700 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
+              <GraduationCap className="w-3.5 h-3.5" />
               <span>Student Special</span>
             </div>
 

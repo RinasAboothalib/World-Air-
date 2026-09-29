@@ -24,9 +24,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenInquiry }) => 
           <div className="lg:col-span-6 relative flex flex-col">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white flex-1 min-h-[460px]">
               <img
-                src="https://images.unsplash.com/photo-1520437358207-323b43b50729?q=80&w=1200&auto=format&fit=crop"
-                alt="Modern international airport terminal with passenger boarding commercial jetliner"
+                src="/about-plane.jpg"
+                alt="Commercial passenger jet airliner taking off at golden sunset"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 absolute inset-0"
+                referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent pointer-events-none" />
 

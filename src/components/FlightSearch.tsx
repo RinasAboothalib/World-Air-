@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TripType, CabinClass, FlightInquiry } from '../types';
 import { POPULAR_AIRPORTS } from '../data/mockData';
 import {
@@ -10,10 +10,30 @@ import {
   ArrowRightLeft,
   Search,
   GraduationCap,
-  Sparkles,
   CheckCircle2,
-  Send
+  Send,
+  ChevronDown,
+  Check
 } from 'lucide-react';
+
+const AIRPORT_FLAG_CODES: Record<string, string> = {
+  CMB: 'lk',
+  LHR: 'gb',
+  MEL: 'au',
+  DXB: 'ae',
+  SIN: 'sg',
+  NRT: 'jp',
+  KUL: 'my',
+  BKK: 'th',
+  DOH: 'qa',
+  MCT: 'om',
+  KWI: 'kw',
+  DEL: 'in',
+  MLE: 'mv',
+  JFK: 'us',
+  YUL: 'ca',
+  SYD: 'au',
+};
 
 interface FlightSearchProps {
   onSearchInquiry: (inquiry: FlightInquiry) => void;
@@ -25,6 +45,28 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
   const [fromCity, setFromCity] = useState('Colombo, Sri Lanka (CMB)');
   const [toCode, setToCode] = useState('LHR');
   const [toCity, setToCity] = useState('London Heathrow (LHR)');
+
+  const [isFromOpen, setIsFromOpen] = useState(false);
+  const [isToOpen, setIsToOpen] = useState(false);
+  const fromRef = useRef<HTMLDivElement>(null);
+  const toRef = useRef<HTMLDivElement>(null);
+  const passengerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (fromRef.current && !fromRef.current.contains(e.target as Node)) {
+        setIsFromOpen(false);
+      }
+      if (toRef.current && !toRef.current.contains(e.target as Node)) {
+        setIsToOpen(false);
+      }
+      if (passengerRef.current && !passengerRef.current.contains(e.target as Node)) {
+        setShowPassengerPopover(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Default dates: departure next week, return 3 weeks later
   const today = new Date();
@@ -44,6 +86,9 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
 
   const [cabinClass, setCabinClass] = useState<CabinClass>('economy');
   const [isStudentFare, setIsStudentFare] = useState(false);
+
+  const fromSelectedAirport = POPULAR_AIRPORTS.find((a) => a.code === fromCode);
+  const toSelectedAirport = POPULAR_AIRPORTS.find((a) => a.code === toCode);
 
   // Quick swap
   const handleSwapAirports = () => {
@@ -151,27 +196,79 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Origin Field */}
-            <div className="lg:col-span-3 relative">
+            <div className="lg:col-span-3 relative" ref={fromRef}>
               <label className="block text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1">
                 From (Origin)
               </label>
               <div className="relative flex items-center">
-                <PlaneTakeoff className="w-4 h-4 text-red-600 absolute left-3 pointer-events-none" />
-                <select
-                  value={fromCode}
-                  onChange={(e) => {
-                    setFromCode(e.target.value);
-                    const found = POPULAR_AIRPORTS.find((a) => a.code === e.target.value);
-                    if (found) setFromCity(`${found.city}, ${found.country} (${found.code})`);
+                <PlaneTakeoff className="w-4 h-4 text-red-600 absolute left-3 pointer-events-none z-10" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsFromOpen(!isFromOpen);
+                    setIsToOpen(false);
+                    setShowPassengerPopover(false);
                   }}
-                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-sm font-semibold text-stone-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer transition-all"
+                  className={`w-full pl-9 pr-8 py-2.5 bg-stone-50/90 border rounded-xl text-xs sm:text-sm font-semibold text-stone-900 shadow-inner flex items-center justify-between text-left transition-all cursor-pointer ${
+                    isFromOpen
+                      ? 'border-red-600 ring-2 ring-red-600/20 bg-white'
+                      : 'border-stone-300 hover:border-stone-400'
+                  }`}
                 >
-                  <option value="CMB">Colombo, Sri Lanka (CMB)</option>
-                  <option value="LHR">London Heathrow, UK (LHR)</option>
-                  <option value="DXB">Dubai, UAE (DXB)</option>
-                  <option value="MEL">Melbourne, Australia (MEL)</option>
-                  <option value="SIN">Singapore (SIN)</option>
-                </select>
+                  <span className="truncate">
+                    {fromSelectedAirport
+                      ? `${fromSelectedAirport.city}, ${fromSelectedAirport.country} (${fromSelectedAirport.code})`
+                      : fromCity}
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-stone-500 shrink-0 transition-transform duration-200 ${
+                      isFromOpen ? 'rotate-180 text-red-600' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Custom Curved Dropdown Menu */}
+                {isFromOpen && (
+                  <div className="absolute left-0 top-full mt-1.5 w-full min-w-[280px] bg-white rounded-xl shadow-2xl border border-stone-200 py-1.5 z-50 animate-in fade-in-50 zoom-in-95 max-h-72 overflow-y-auto">
+                    <div className="px-3 py-1.5 text-[10px] font-bold text-stone-400 uppercase tracking-wider border-b border-stone-100 mb-1">
+                      Select Departure Airport
+                    </div>
+                    {POPULAR_AIRPORTS.map((airport) => {
+                      const isSelected = airport.code === fromCode;
+                      const flagCode = AIRPORT_FLAG_CODES[airport.code] || 'lk';
+                      return (
+                        <button
+                          key={airport.code}
+                          type="button"
+                          onClick={() => {
+                            setFromCode(airport.code);
+                            setFromCity(`${airport.city}, ${airport.country} (${airport.code})`);
+                            setIsFromOpen(false);
+                          }}
+                          className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-red-50 text-red-900 font-bold'
+                              : 'text-stone-700 hover:bg-stone-50 font-medium'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <img
+                              src={`https://flagcdn.com/w40/${flagCode}.png`}
+                              alt={airport.country}
+                              className="w-4 h-3 object-cover rounded-xs shrink-0 shadow-xs"
+                              loading="lazy"
+                            />
+                            <span className="truncate">
+                              {airport.city} ({airport.code}){' '}
+                              <span className="text-stone-400 font-normal">· {airport.country}</span>
+                            </span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-red-600 shrink-0 ml-1" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -188,27 +285,79 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
             </div>
 
             {/* Destination Field */}
-            <div className="lg:col-span-3 relative">
+            <div className="lg:col-span-3 relative" ref={toRef}>
               <label className="block text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1">
                 To (Destination)
               </label>
               <div className="relative flex items-center">
-                <PlaneLanding className="w-4 h-4 text-red-600 absolute left-3 pointer-events-none" />
-                <select
-                  value={toCode}
-                  onChange={(e) => {
-                    setToCode(e.target.value);
-                    const found = POPULAR_AIRPORTS.find((a) => a.code === e.target.value);
-                    if (found) setToCity(`${found.city} (${found.code})`);
+                <PlaneLanding className="w-4 h-4 text-red-600 absolute left-3 pointer-events-none z-10" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsToOpen(!isToOpen);
+                    setIsFromOpen(false);
+                    setShowPassengerPopover(false);
                   }}
-                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-sm font-semibold text-stone-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 cursor-pointer transition-all"
+                  className={`w-full pl-9 pr-8 py-2.5 bg-stone-50/90 border rounded-xl text-xs sm:text-sm font-semibold text-stone-900 shadow-inner flex items-center justify-between text-left transition-all cursor-pointer ${
+                    isToOpen
+                      ? 'border-red-600 ring-2 ring-red-600/20 bg-white'
+                      : 'border-stone-300 hover:border-stone-400'
+                  }`}
                 >
-                  {POPULAR_AIRPORTS.filter((a) => a.code !== fromCode).map((airport) => (
-                    <option key={airport.code} value={airport.code}>
-                      {airport.city} ({airport.code}) — {airport.country}
-                    </option>
-                  ))}
-                </select>
+                  <span className="truncate">
+                    {toSelectedAirport
+                      ? `${toSelectedAirport.city} (${toSelectedAirport.code})`
+                      : toCity}
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-stone-500 shrink-0 transition-transform duration-200 ${
+                      isToOpen ? 'rotate-180 text-red-600' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Custom Curved Dropdown Menu */}
+                {isToOpen && (
+                  <div className="absolute left-0 top-full mt-1.5 w-full min-w-[280px] bg-white rounded-xl shadow-2xl border border-stone-200 py-1.5 z-50 animate-in fade-in-50 zoom-in-95 max-h-72 overflow-y-auto">
+                    <div className="px-3 py-1.5 text-[10px] font-bold text-stone-400 uppercase tracking-wider border-b border-stone-100 mb-1">
+                      Select Arrival Airport
+                    </div>
+                    {POPULAR_AIRPORTS.filter((a) => a.code !== fromCode).map((airport) => {
+                      const isSelected = airport.code === toCode;
+                      const flagCode = AIRPORT_FLAG_CODES[airport.code] || 'lk';
+                      return (
+                        <button
+                          key={airport.code}
+                          type="button"
+                          onClick={() => {
+                            setToCode(airport.code);
+                            setToCity(`${airport.city} (${airport.code})`);
+                            setIsToOpen(false);
+                          }}
+                          className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-red-50 text-red-900 font-bold'
+                              : 'text-stone-700 hover:bg-stone-50 font-medium'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <img
+                              src={`https://flagcdn.com/w40/${flagCode}.png`}
+                              alt={airport.country}
+                              className="w-4 h-3 object-cover rounded-xs shrink-0 shadow-xs"
+                              loading="lazy"
+                            />
+                            <span className="truncate">
+                              {airport.city} ({airport.code}){' '}
+                              <span className="text-stone-400 font-normal">· {airport.country}</span>
+                            </span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-red-600 shrink-0 ml-1" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -251,14 +400,22 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
             </div>
 
             {/* Passengers & Class Button */}
-            <div className="lg:col-span-2 relative">
+            <div className="lg:col-span-2 relative" ref={passengerRef}>
               <label className="block text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1">
                 Travelers & Class
               </label>
               <button
                 type="button"
-                onClick={() => setShowPassengerPopover(!showPassengerPopover)}
-                className="w-full px-3 py-2.5 bg-stone-50/90 border border-stone-300 rounded-xl text-xs font-semibold text-stone-900 shadow-inner flex items-center justify-between hover:bg-stone-100 transition-colors cursor-pointer text-left"
+                onClick={() => {
+                  setShowPassengerPopover(!showPassengerPopover);
+                  setIsFromOpen(false);
+                  setIsToOpen(false);
+                }}
+                className={`w-full px-3 py-2.5 bg-stone-50/90 border rounded-xl text-xs font-semibold text-stone-900 shadow-inner flex items-center justify-between hover:bg-stone-100 transition-colors cursor-pointer text-left ${
+                  showPassengerPopover
+                    ? 'border-red-600 ring-2 ring-red-600/20 bg-white'
+                    : 'border-stone-300'
+                }`}
               >
                 <span className="truncate">
                   {totalPassengers} Pax · {cabinClass.replace('-', ' ').toUpperCase()}
@@ -268,7 +425,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
 
               {/* Passengers dropdown popover */}
               {showPassengerPopover && (
-                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-xl border border-stone-200 p-4 z-50 animate-in fade-in-50">
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-2xl border border-stone-200 p-4 z-50 animate-in fade-in-50">
                   <div className="flex items-center justify-between pb-2 border-b border-stone-100 mb-3">
                     <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">
                       Select Passengers
@@ -276,7 +433,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                     <button
                       type="button"
                       onClick={() => setShowPassengerPopover(false)}
-                      className="text-xs font-bold text-red-700 hover:underline"
+                      className="text-xs font-bold text-red-700 hover:underline cursor-pointer"
                     >
                       Done
                     </button>
@@ -292,7 +449,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                         <button
                           type="button"
                           onClick={() => setAdults(Math.max(1, adults - 1))}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           -
                         </button>
@@ -300,7 +457,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                         <button
                           type="button"
                           onClick={() => setAdults(adults + 1)}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -316,7 +473,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                         <button
                           type="button"
                           onClick={() => setChildren(Math.max(0, children - 1))}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           -
                         </button>
@@ -324,7 +481,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                         <button
                           type="button"
                           onClick={() => setChildren(children + 1)}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -340,7 +497,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                         <button
                           type="button"
                           onClick={() => setStudents(Math.max(0, students - 1))}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           -
                         </button>
@@ -351,7 +508,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                             setStudents(students + 1);
                             setIsStudentFare(true);
                           }}
-                          className="w-7 h-7 rounded border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100"
+                          className="w-7 h-7 rounded-lg border border-stone-300 flex items-center justify-center text-xs font-bold hover:bg-stone-100 cursor-pointer"
                         >
                           +
                         </button>
@@ -366,7 +523,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
                       <select
                         value={cabinClass}
                         onChange={(e) => setCabinClass(e.target.value as CabinClass)}
-                        className="w-full p-1.5 text-xs bg-stone-50 border border-stone-300 rounded font-semibold text-stone-900"
+                        className="w-full p-2 text-xs bg-stone-50 border border-stone-300 rounded-xl font-semibold text-stone-900 focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer"
                       >
                         <option value="economy">Economy Class</option>
                         <option value="premium-economy">Premium Economy</option>
@@ -383,8 +540,7 @@ export const FlightSearch: React.FC<FlightSearchProps> = ({ onSearchInquiry }) =
           {/* Action Row & Quick Popular Cities */}
           <div className="mt-5 pt-4 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2 text-xs text-stone-500">
-              <span className="font-semibold text-stone-700 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span className="font-semibold text-stone-700">
                 Popular Routes:
               </span>
               {[

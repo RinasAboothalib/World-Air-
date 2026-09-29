@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DESTINATIONS } from '../data/mockData';
 import { Destination } from '../types';
-import { Plane, Clock, ArrowRight, MapPin, Sparkles } from 'lucide-react';
+import { Plane, Clock, ArrowRight, MapPin } from 'lucide-react';
 
 interface DestinationsSectionProps {
   onSelectDestination: (dest: Destination) => void;
@@ -136,7 +136,7 @@ export const DestinationsSection: React.FC<DestinationsSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => onSelectDestination(dest)}
-                  className="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 px-4 rounded text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow group-hover:bg-red-600 cursor-pointer border border-red-600"
+                  className="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow group-hover:bg-red-600 cursor-pointer border border-red-600"
                 >
                   <Plane className="w-3.5 h-3.5 -rotate-45" />
                   <span>Inquire This Route</span>

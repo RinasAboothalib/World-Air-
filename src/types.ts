@@ -1,6 +1,8 @@
 export type TripType = 'round-trip' | 'one-way' | 'multi-city';
 export type CabinClass = 'economy' | 'premium-economy' | 'business' | 'first';
 
+export type PageId = 'home' | 'booking' | 'about' | 'services' | 'destinations' | 'contact';
+
 export interface FlightInquiry {
   tripType: TripType;
   fromCity: string;
