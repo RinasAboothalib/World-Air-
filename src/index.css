@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-display: 'Cinzel', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+.font-serif-luxury {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-display-luxury {
+  font-family: 'Cinzel', Georgia, serif;
+}
+
+/* Subtle gold shimmer effect for luxury badges */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #DFB76C 0%, #C59B27 50%, #9A7718 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #E5C378 0%, #C59B27 50%, #A47D1C 100%);
+}
+
+.gold-border {
+  border-color: rgba(197, 155, 39, 0.35);
+}
+
+/* Aviation flight line dash animation */
+@keyframes flightDash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-flight-dash {
+  animation: flightDash 2s linear infinite;
+}
+
+/* Smooth custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #991b1b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7f1d1d;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "World Air Sri Lanka - International Flights & Travel",
+  "description": "World Air (Pvt.) Ltd. — Sri Lanka's established travel agency specializing in international airline tickets, student fares, visa assistance and holiday packages with 25+ years of excellence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

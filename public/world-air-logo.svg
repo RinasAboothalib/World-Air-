@@ -1,0 +1,31 @@
+<svg viewBox="0 0 460 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="8" y1="8" x2="452" y2="8" stroke="#A6192E" stroke-width="3.5" />
+  <line x1="8" y1="8" x2="8" y2="182" stroke="#A6192E" stroke-width="3.5" />
+  <line x1="452" y1="8" x2="452" y2="182" stroke="#A6192E" stroke-width="3.5" />
+  <line x1="8" y1="182" x2="142" y2="182" stroke="#A6192E" stroke-width="3.5" />
+  <line x1="278" y1="182" x2="452" y2="182" stroke="#A6192E" stroke-width="3.5" />
+
+  <path d="M 38 34 L 59 104 L 75 48 L 91 104 L 114 34 L 94 34 L 83 79 L 71 34 L 63 34 L 51 79 L 42 34 Z" fill="#A6192E" />
+
+  <g transform="translate(170, 69)">
+    <circle cx="0" cy="0" r="34" stroke="#A6192E" stroke-width="5.5" fill="none" />
+    <line x1="-34" y1="0" x2="34" y2="0" stroke="#A6192E" stroke-width="4.5" />
+    <line x1="0" y1="-34" x2="0" y2="34" stroke="#A6192E" stroke-width="4.5" />
+    <path d="M -28 -17 C -14 -11, 14 -11, 28 -17" stroke="#A6192E" stroke-width="3.5" fill="none" />
+    <path d="M -28 17 C -14 11, 14 11, 28 17" stroke="#A6192E" stroke-width="3.5" fill="none" />
+    <path d="M 0 -34 C -19 -21, -19 21, 0 34" stroke="#A6192E" stroke-width="3.5" fill="none" />
+    <path d="M 0 -34 C 19 -21, 19 21, 0 34" stroke="#A6192E" stroke-width="3.5" fill="none" />
+  </g>
+
+  <path d="M 220 34 L 260 34 C 280 34, 292 43, 292 57 C 292 68, 283 76, 270 78 L 295 104 L 274 104 L 252 80 L 239 80 L 239 104 L 220 104 Z M 239 49 L 239 66 L 257 66 C 266 66, 273 63, 273 57 C 273 51, 266 49, 257 49 Z" fill="#A6192E" />
+  <path d="M 308 34 L 327 34 L 327 87 L 359 87 L 359 104 L 308 104 Z" fill="#A6192E" />
+  <path d="M 374 34 L 407 34 C 430 34, 444 47, 444 69 C 444 91, 430 104, 407 104 L 374 104 Z M 393 50 L 393 88 L 407 88 C 420 88, 425 81, 425 69 C 425 57, 420 50, 407 50 Z" fill="#A6192E" />
+
+  <path d="M 148 182 L 173 118 L 193 118 L 217 182 L 201 182 L 194 163 L 174 163 L 166 182 Z M 178 149 L 189 149 L 184 133 Z" fill="#A6192E" />
+  <path d="M 223 118 L 238 118 L 238 182 L 223 182 Z" fill="#A6192E" />
+  <path d="M 250 118 L 279 118 C 294 118, 303 125, 303 135 C 303 143, 296 150, 287 152 L 306 182 L 289 182 L 273 156 L 265 156 L 265 182 L 250 182 Z M 265 131 L 265 144 L 277 144 C 284 144, 288 142, 288 137 C 288 132, 284 131, 277 131 Z" fill="#A6192E" />
+
+  <line x1="298" y1="166" x2="380" y2="166" stroke="#A6192E" stroke-width="3.5" />
+  <line x1="284" y1="182" x2="428" y2="182" stroke="#A6192E" stroke-width="3.5" />
+  <path d="M 380 166 L 428 166 L 444 122 C 444 122, 434 122, 428 126 C 410 136, 392 152, 380 166 Z" fill="#A6192E" />
+</svg>
